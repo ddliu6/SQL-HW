@@ -1,2 +1,2 @@
-# SQL HW
- SEP Training Program
+# SQL Server Training
+There are all assignments for practicing
