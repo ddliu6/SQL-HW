@@ -28,12 +28,10 @@ USE AdventureWorks2019
 GO
 -- Write queries for following scenarios
 -- 1.	How many products can you find in the Production.Product table?
-SELECT COUNT(*) AS NumOfProducts
-FROM Production.Product
+SELECT COUNT(*) AS NumOfProducts FROM Production.Product
 -- 2.	Write a query that retrieves the number of products in the Production.Product table that are included in a subcategory. The rows that have NULL in column ProductSubcategoryID are considered to not be a part of any subcategory.
 -- First method, since COUNT(column) doesn't return NULL
-SELECT COUNT(ProductSubcategoryID) AS NumOfProducts
-FROM Production.Product
+SELECT COUNT(ProductSubcategoryID) AS NumOfProducts FROM Production.Product
 -- Second method
 SELECT COUNT(*) AS NumOfProducts
 FROM Production.Product
@@ -52,8 +50,7 @@ WHERE ProductSubcategoryID IS NULL
 -- 5.	Write a query to list the sum of products quantity in the Production.ProductInventory table.
 SELECT SUM(Quantity) AS [Total Products]
 FROM Production.ProductInventory
-SELECT *
-FROM Production.ProductInventory
+GROUP BY ProductID
 -- 6.	Write a query to list the sum of products in the Production.ProductInventory table and LocationID set to 40 and limit the result to include just summarized quantities less than 100.
 --  ProductID           TheSum
 -- -----------        ----------
@@ -74,6 +71,7 @@ HAVING SUM(Quantity) < 100
 SELECT AVG(Quantity) AS TheAvg
 FROM Production.ProductInventory
 WHERE LocationID = 10
+GROUP BY ProductID
 -- 9.	Write query to see the average quantity of products by shelf from the table Production.ProductInventory
 --  ProductID     Shelf     TheAvg
 -- ----------- ---------- -----------
@@ -108,7 +106,7 @@ ORDER BY Country
 SELECT c.Name AS Country, s.Name AS Province
 FROM person.CountryRegion c JOIN person.StateProvince s
     ON c.CountryRegionCode = s.CountryRegionCode
-WHERE c.Name = 'Germany' OR c.Name = 'Canada'
+WHERE c.Name NOT IN ('Germany', 'Canada')
 ORDER BY Country
 --         Using Northwind Database: (Use aliases for all the Joins)
 USE Northwind
@@ -117,20 +115,20 @@ GO
 SELECT DISTINCT p.ProductName
 FROM Products p JOIN [Order Details] od ON p.ProductID = od.ProductID
     JOIN Orders o ON o.OrderID = od.OrderID
-WHERE DATEDIFF(year, o.OrderDate, GETDATE()) <= 25
+WHERE DATEDIFF(year, o.OrderDate, GETDATE()) < 25
 -- 15.	List top 5 locations (Zip Code) where the products sold most.
-SELECT TOP 5
-    o.ShipPostalCode
+SELECT TOP 5 o.ShipPostalCode, SUM(od.Quantity) AS Quantity
 FROM Orders o JOIN [Order Details] od ON o.OrderID = od.OrderID
+WHERE o.shipPostalCode IS NOT NULL
 GROUP BY o.ShipPostalCode
-ORDER BY SUM(od.Quantity) DESC
+ORDER BY Quantity DESC
 -- 16.	List top 5 locations (Zip Code) where the products sold most in last 25 years.
-SELECT TOP 5
-    o.ShipPostalCode
+SELECT TOP 5 o.ShipPostalCode, SUM(od.Quantity) AS Quantity
 FROM Orders o JOIN [Order Details] od ON o.OrderID = od.OrderID
-WHERE DATEDIFF(year, o.OrderDate, GETDATE()) <= 25
+WHERE DATEDIFF(year, o.OrderDate, GETDATE()) < 25
+    AND o.shipPostalCode IS NOT NULL
 GROUP BY o.ShipPostalCode
-ORDER BY SUM(od.Quantity) DESC
+ORDER BY Quantity DESC
 -- 17.	List all city names and number of customers in that city.
 SELECT City, COUNT(CustomerID) AS NumofCustomers
 FROM Customers
@@ -141,17 +139,17 @@ FROM Customers
 GROUP BY City
 HAVING COUNT(CustomerID) > 2
 -- 19.	List the names of customers who placed orders after 1/1/98 with order date.
-SELECT c.CustomerID
+SELECT DISTINCT c.CustomerID, c.CompanyName, c.ContactName
 FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID
 WHERE o.OrderDate > '1998-01-01'
 -- 20.	List the names of all customers with most recent order dates
-SELECT c.CustomerID AS [Customer Name], o.OrderDate AS [Most Recent Order Dates]
-FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID
-ORDER BY o.OrderDate DESC
+SELECT c.CustomerID AS [Customer Name], MAX(o.OrderDate) AS [Most Recent Order Dates]
+FROM Customers c LEFT JOIN Orders o ON c.CustomerID = o.CustomerID
+GROUP BY c.CustomerID
 -- 21.	Display the names of all customers along with the count of products they bought
 SELECT c.CustomerID AS [Customer Name], SUM(od.Quantity) AS [Bought Products]
-FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID
-    JOIN [Order Details] od ON o.OrderID = od.OrderID
+FROM Customers c LEFT JOIN Orders o ON c.CustomerID = o.CustomerID
+    LEFT JOIN [Order Details] od ON o.OrderID = od.OrderID
 GROUP BY c.CustomerID
 ORDER BY c.CustomerID
 -- 22.	Display the customer ids who bought more than 100 Products with count of products.
@@ -171,7 +169,7 @@ FROM Suppliers sup JOIN Products p ON sup.SupplierID = p.SupplierID
     JOIN Shippers ship ON o.ShipVia = ship.ShipperID
 ORDER BY sup.CompanyName
 -- 24.	Display the products order each day. Show Order date and Product Name.
-SELECT o.OrderDate, p.ProductName
+SELECT DISTINCT o.OrderDate, p.ProductName
 FROM Products p JOIN [Order Details] od ON p.ProductID = od.ProductID
     JOIN Orders o ON o.OrderID = od.OrderID
 ORDER BY o.OrderDate
@@ -188,11 +186,11 @@ HAVING COUNT(b.ReportsTo) > 2
 ORDER BY [Manager Name]
 -- 27.	Display the customers and suppliers by city. The results should have the following columns
 -- City -- Name -- Contact Name -- Type (Customer or Supplier)
-    SELECT City, CustomerID AS Name, ContactName AS [Contact Name], 'Customer' AS Type
-    FROM Customers
+SELECT City, CustomerID AS Name, ContactName AS [Contact Name], 'Customer' AS Type
+FROM Customers
 UNION
-    SELECT City, CompanyName AS Name, ContactName AS [Contact Name], 'Supplier' AS Type
-    FROM Suppliers
+SELECT City, CompanyName AS Name, ContactName AS [Contact Name], 'Supplier' AS Type
+FROM Suppliers
 ORDER BY CITY
 -- 28.  Have two tables T1 and T2
 -- F1.T1	F2.T2

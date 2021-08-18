@@ -91,7 +91,7 @@ WHERE a.Color IS NOT NULL
 SELECT DISTINCT ProductSubcategoryID, Color
 FROM Production.Product
 WHERE ProductSubcategoryID IS NOT NULL AND Color IS NOT NULL
--- 16.	Something is “wrong” with the WHERE clause in the following query. 
+-- 16.      Something is “wrong” with the WHERE clause in the following query. 
 -- We do not want any Red or Black products from any SubCategory than those with the value of 1 in column ProductSubCategoryID, unless they cost between 1000 and 2000.
 -- Note: The LEFT() function will be covered in a forthcoming module.
 SELECT ProductSubCategoryID
@@ -109,3 +109,10 @@ FROM Production.Product
 WHERE Color IN ('Red','Black') 
       AND ProductSubCategoryID = 1
 ORDER BY ProductSubCategoryID
+-- This query shows the results that are not restrict to red and black colors
+SELECT ProductSubcategoryID,
+      LEFT([NAME],35) AS [NAME],
+      color, ListPrice 
+      FROM Production.Product
+WHERE ListPrice BETWEEN 1000 AND 2000 OR ( ProductSubcategoryID = 1 AND Color IN ('Red','Black'))
+ORDER BY ProductSubcategoryID
