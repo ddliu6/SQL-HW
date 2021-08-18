@@ -1,2 +1,2 @@
 # SQL Server Training
-There are all assignments for practicing
+All assignments are organized by date
