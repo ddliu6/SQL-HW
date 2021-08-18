@@ -1,29 +1,29 @@
 -- 1.	What is a result set?
---      A selected set of rows from a database.
+        A selected set of rows from a database.
 -- 2.	What is the difference between Union and Union All?
---      UNION combines the result set of 2+ SELECT statements with distinct values, while UNION ALL combines it with duplicated values.
+        UNION combines the result set of 2+ SELECT statements with distinct values, while UNION ALL combines it with duplicated values.
 -- 3.	What are the other Set Operators SQL Server has?
---      EXCEPT and INTERSECT.
+        EXCEPT and INTERSECT.
 -- 4.	What is the difference between Union and Join?
---      UNION combines rows from different queries, while JOIN combines columns from different tables.
+        UNION combines rows from different queries, while JOIN combines columns from different tables.
 -- 5.	What is the difference between INNER JOIN and FULL JOIN?
---      INNER JOIN results in the overlapping part of two datasets, while FULL JOIN also combines the outer parts of the two datasets.
+        INNER JOIN results in the overlapping part of two datasets, while FULL JOIN also combines the outer parts of the two datasets.
 -- 6.	What is difference between left join and outer join
---      LEFT JOIN is one type of OUTER JOINs(LEFT, RIGHT, FULL).
---      OUTER JOIN will return more rows when (INNER) JOIN.
---      For instance, LEFT (OUTER) JOIN will also return unmatched rows from the left table while joining.
+        LEFT JOIN is one type of OUTER JOINs(LEFT, RIGHT, FULL).
+        OUTER JOIN will return more rows when (INNER) JOIN.
+        For instance, LEFT (OUTER) JOIN will also return unmatched rows from the left table while joining.
 -- 7.	What is cross join?
---      According to the definition on W3resource(https://www.w3resource.com/sql/joins/cross-join.php).
---      "CROSS JOIN produces a result set which is the number of rows in the first table multiplied by the number of rows in the second table.
---      If no WHERE clause is used along with CROSS JOIN, this kind of result is called as Cartesian Product".
---      In other words, CROSS JOIN makes different rows from 2 tables connect to each other.
---      Therefore, there will be COUNT(table1) * COUNT(table2) rows in the result set.
+        According to the definition on W3resource(https://www.w3resource.com/sql/joins/cross-join.php).
+        "CROSS JOIN produces a result set which is the number of rows in the first table multiplied by the number of rows in the second table.
+        If no WHERE clause is used along with CROSS JOIN, this kind of result is called as Cartesian Product".
+        In other words, CROSS JOIN makes different rows from 2 tables connect to each other.
+        Therefore, there will be COUNT(table1) * COUNT(table2) rows in the result set.
 -- 8.	What is the difference between WHERE clause and HAVING clause?
---      Both Clauses are used to filter the records from the table.
---      WHERE is single based, and it can be used in SELECT, UPDATE, DELETE statements,
---      while HAVING is groups based, and it can only be used in SELECT statements.
+        Both Clauses are used to filter the records from the table.
+        WHERE is single based, and it can be used in SELECT, UPDATE, DELETE statements,
+        while HAVING is groups based, and it can only be used in SELECT statements.
 -- 9.	Can there be multiple group by columns?
---      Yes, the SELECT column(s) should be grouped if using an aggregate function.
+        Yes, the SELECT column(s) should be grouped if using an aggregate function.
 USE AdventureWorks2019
 GO
 -- Write queries for following scenarios
@@ -198,17 +198,15 @@ ORDER BY CITY
 --   2	      3
 --   3	      4
 -- Please write a query to inner join these two tables and write down the result of this query.
--- SELECT * FROM T1 JOIN T2 ON T1.F1 = T2.F2
---      Result
---   F1	      F2
--- ------   ------
---   2	      2
---   3	      3
+   SELECT * FROM T1 JOIN T2 ON T1.F1 = T2.F2
+     F1	      F2
+   ------   ------
+     2	      2
+     3	      3
 -- 29.  Based on above two table, Please write a query to left outer join these two tables and write down the result of this query.
--- SELECT * FROM T1 LEFT JOIN T2 ON T1.F1 = T2.F2
---      Result
---   F1	      F2
--- ------   ------
---   1       NULL
---   2	      2
---   3	      3
+   SELECT * FROM T1 LEFT JOIN T2 ON T1.F1 = T2.F2
+     F1	      F2
+   ------   ------
+     1       NULL
+     2	      2
+     3	      3

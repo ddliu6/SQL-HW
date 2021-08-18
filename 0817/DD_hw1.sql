@@ -94,6 +94,7 @@ WHERE ProductSubcategoryID IS NOT NULL AND Color IS NOT NULL
 -- 16.      Something is “wrong” with the WHERE clause in the following query. 
 -- We do not want any Red or Black products from any SubCategory than those with the value of 1 in column ProductSubCategoryID, unless they cost between 1000 and 2000.
 -- Note: The LEFT() function will be covered in a forthcoming module.
+-- This query shows the results that are restrict to red and black colors
 SELECT ProductSubCategoryID
       , LEFT([Name],35) AS [Name]
       , Color, ListPrice 
