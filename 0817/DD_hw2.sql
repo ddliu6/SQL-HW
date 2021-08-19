@@ -198,13 +198,13 @@ ORDER BY CITY
 --   2	      3
 --   3	      4
 -- Please write a query to inner join these two tables and write down the result of this query.
-   SELECT * FROM T1 JOIN T2 ON T1.F1 = T2.F2
+SELECT * FROM T1 JOIN T2 ON T1.F1 = T2.F2
      F1	      F2
    ------   ------
      2	      2
      3	      3
 -- 29.  Based on above two table, Please write a query to left outer join these two tables and write down the result of this query.
-   SELECT * FROM T1 LEFT JOIN T2 ON T1.F1 = T2.F2
+SELECT * FROM T1 LEFT JOIN T2 ON T1.F1 = T2.F2
      F1	      F2
    ------   ------
      1       NULL
