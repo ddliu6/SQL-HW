@@ -50,26 +50,25 @@ GROUP BY c.City
 ORDER BY c.City
 -- 5.	List all Customer Cities that have at least two customers.
 -- a.	Use union
-SELECT City, COUNT(CustomerID)
-FROM Customers
+SELECT City FROM Customers
+EXCEPT
+SELECT City FROM Customers
 GROUP BY City
-HAVING COUNT(CustomerID) >= 2
+HAVING COUNT(CustomerID) = 1
 UNION 
-SELECT City, COUNT(CustomerID)
-FROM Customers
+SELECT City FROM Customers
 GROUP BY City
-HAVING COUNT(CustomerID) >= 2
-ORDER BY City
+HAVING COUNT(CustomerID) = 0
 -- b.	Use sub-query and no union
 SELECT DISTINCT City
 FROM Customers
 WHERE City IN (SELECT City FROM Customers GROUP BY City HAVING COUNT(CustomerID) >= 2)
 ORDER BY City
 -- 6.	List all Customer Cities that have ordered at least two different kinds of products.
-SELECT DISTINCT c.City, COUNT(od.ProductID) [Product Kinds]
+SELECT DISTINCT c.City
 FROM Customers c LEFT JOIN Orders o ON c.CustomerID = o.CustomerID
     JOIN [Order Details] od ON o.OrderID = od.OrderID
-GROUP BY c.City
+GROUP BY c.City, od.ProductID
 HAVING COUNT(od.ProductID) >= 2
 ORDER BY c.City
 -- 7.	List all Customers who have ordered products, but have the ‘ship city’ on the order different from their own customer cities.
@@ -78,32 +77,35 @@ FROM Customers c LEFT JOIN Orders o ON c.CustomerID = o.CustomerID
 WHERE c.City <> o.ShipCity
 ORDER BY c.CustomerID
 -- 8.	List 5 most popular products, their average price, and the customer city that ordered most quantity of it.
-SELECT TOP 5 p.ProductName, AVG(od.UnitPrice) [AVG Price], c.City, SUM(od.Quantity) QTY
-FROM Products p LEFT JOIN [Order Details] od ON p.ProductID = od.ProductID
-    LEFT JOIN Orders o ON od.OrderID = o.OrderID
-    JOIN Customers c ON o.CustomerID = c.CustomerID
-GROUP BY p.ProductName, c.City
-ORDER BY QTY DESC, 1
+SELECT TOP 5 (SELECT TOP 1 ProductName FROM Products p JOIN [Order Details] od2 ON od2.ProductID = od1.ProductID WHERE p.ProductID = od1.ProductID) [Product Name], AVG(od1.UnitPrice) [AVG Price], (SELECT TOP 1 c.City FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID JOIN [Order Details] od3 ON o.OrderID = od3.OrderID WHERE od1.ProductID = od3.ProductID GROUP BY c.City ORDER BY SUM(od3.Quantity) DESC) MostOrderedCity
+FROM [Order Details] od1
+GROUP BY od1.ProductID
+ORDER BY SUM(od1.Quantity) DESC
 -- 9.	List all cities that have never ordered something but we have employees there.
 -- a.	Use sub-query
-SELECT DISTINCT e.City
-FROM Employees e LEFT JOIN Orders o ON e.EmployeeID = o.EmployeeID
-WHERE e.City IN (SELECT c.City FROM Customers c LEFT JOIN Orders o ON c.CustomerID = o.CustomerID WHERE o.OrderID IS NULL)
-ORDER BY e.City
+SELECT DISTINCT City 
+FROM Employees 
+WHERE City NOT IN (SELECT ShipCity FROM Orders WHERE ShipCity IS NOT NULL)
 -- b.	Do not use sub-query
-SELECT e.City, o.CustomerID
-FROM Employees e LEFT JOIN Orders o ON e.EmployeeID = o.EmployeeID
-    LEFT JOIN Customers c ON o.CustomerID = c.CustomerID
-WHERE o.OrderID IS NULL AND e.City = c.City
-ORDER BY e.City
+SELECT DISTINCT City 
+FROM Employees
+WHERE City IS NOT NULL
+EXCEPT 
+SELECT ShipCity
+FROM Orders 
+WHERE ShipCity IS NOT NULL
 -- 10.	List one city, if exists, that is the city from where the employee sold most orders (not the product quantity) is,
 -- and also the city of most total quantity of products ordered from. (tip: join  sub-query)
-SELECT e.City, COUNT(o.OrderID) [Orders QTY], SUM(od.Quantity) [Products QTY]
-FROM Employees e LEFT JOIN Orders o ON e.EmployeeID = o.EmployeeID
-    LEFT JOIN [Order Details] od ON o.OrderID = od.OrderID
-    LEFT JOIN Customers c ON o.CustomerID = c.CustomerID
-GROUP BY e.City
-ORDER BY 2 DESC
+SELECT (SELECT TOP 1 e.City FROM Employees e JOIN Orders o ON e.EmployeeID = o.EmployeeID
+    JOIN [Order Details] od ON o.OrderID = od.OrderID
+    JOIN Customers c ON o.CustomerID = c.CustomerID
+GROUP BY e.EmployeeID, e.City
+ORDER BY COUNT(o.OrderID) DESC) MostOrderedCity,
+(SELECT TOP 1 e.City MostOrderedCity FROM Employees e JOIN Orders o ON e.EmployeeID = o.EmployeeID
+    JOIN [Order Details] od ON o.OrderID = od.OrderID
+    JOIN Customers c ON o.CustomerID = c.CustomerID
+GROUP BY e.EmployeeID, e.City
+ORDER BY SUM(od.Quantity) DESC) MostQunatitySoldCity
 -- 11.  How do you remove the duplicates record of a table?
 WITH CTE AS
 (
