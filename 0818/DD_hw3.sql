@@ -77,7 +77,11 @@ FROM Customers c LEFT JOIN Orders o ON c.CustomerID = o.CustomerID
 WHERE c.City <> o.ShipCity
 ORDER BY c.CustomerID
 -- 8.	List 5 most popular products, their average price, and the customer city that ordered most quantity of it.
-SELECT TOP 5 (SELECT TOP 1 ProductName FROM Products p JOIN [Order Details] od2 ON od2.ProductID = od1.ProductID WHERE p.ProductID = od1.ProductID) [Product Name], AVG(od1.UnitPrice) [AVG Price], (SELECT TOP 1 c.City FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID JOIN [Order Details] od3 ON o.OrderID = od3.OrderID WHERE od1.ProductID = od3.ProductID GROUP BY c.City ORDER BY SUM(od3.Quantity) DESC) MostOrderedCity
+SELECT TOP 5 (SELECT TOP 1 ProductName FROM Products p JOIN [Order Details] od2 ON od2.ProductID = od1.ProductID WHERE p.ProductID = od1.ProductID) [Product Name],
+    AVG(od1.UnitPrice) [AVG Price],
+    (SELECT TOP 1 c.City FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID 
+        JOIN [Order Details] od3 ON o.OrderID = od3.OrderID 
+    WHERE od1.ProductID = od3.ProductID GROUP BY c.City ORDER BY SUM(od3.Quantity) DESC) MostOrderedCity
 FROM [Order Details] od1
 GROUP BY od1.ProductID
 ORDER BY SUM(od1.Quantity) DESC
