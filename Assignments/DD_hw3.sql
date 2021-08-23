@@ -22,21 +22,15 @@
 USE NORTHWIND
 GO
 -- 1.	List all cities that have both Employees and Customers.
-SELECT DISTINCT e.City
-FROM Employees e LEFT JOIN Orders o ON e.EmployeeID = o.EmployeeID
-    JOIN Customers c ON o.CustomerID = c.CustomerID
-WHERE e.City = c.City
+SELECT DISTINCT City FROM Customers WHERE City IN (SELECT City FROM Employees)
 -- 2.	List all cities that have Customers but no Employee.
 -- a.	Use sub-query
-SELECT DISTINCT c.City
-FROM Customers c
-    LEFT JOIN (SELECT CustomerID, EmployeeID FROM Orders) o ON c.CustomerID = o.CustomerID
-WHERE c.City NOT IN (SELECT e.City FROM Employees e WHERE o.EmployeeID = e.EmployeeID)
+SELECT DISTINCT City FROM Customers 
+WHERE City NOT IN (SELECT DISTINCT City FROM Employees WHERE City IS NOT NULL)
 -- b.	Do not use sub-query
-SELECT DISTINCT c.City
-FROM Customers c LEFT JOIN Orders o ON c.CustomerID = o.CustomerID
-    LEFT JOIN Employees e ON o.EmployeeID = e.EmployeeID
-WHERE c.City <> e.City
+SELECT DISTINCT City FROM Customers  
+EXCEPT 
+SELECT DISTINCT City FROM Employees
 -- 3.	List all products and their total order quantities throughout all orders.
 SELECT p.ProductName, SUM(od.Quantity) [TotalQTY]
 FROM Products p LEFT JOIN [Order Details] od ON p.ProductID = od.ProductID
