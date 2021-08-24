@@ -60,7 +60,7 @@ WHERE City IN (SELECT City FROM Customers GROUP BY City HAVING COUNT(CustomerID)
 ORDER BY City
 -- 6.	List all Customer Cities that have ordered at least two different kinds of products.
 SELECT DISTINCT c.City
-FROM Customers c LEFT JOIN Orders o ON c.CustomerID = o.CustomerID
+FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID
     JOIN [Order Details] od ON o.OrderID = od.OrderID
 GROUP BY c.City, od.ProductID
 HAVING COUNT(od.ProductID) >= 2
