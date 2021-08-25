@@ -162,24 +162,34 @@ BEGIN
 SELECT * INTO birthday_employees_your_liu FROM Employees WHERE MONTH(BirthDate) = 2
 END
 -- 11.	Create a stored procedure named “sp_your_last_name_1” that returns all cites that have at least 2 customers who have bought no or only one kind of product. Create a stored procedure named “sp_your_last_name_2” that returns the same but using a different approach. (sub-query and no-sub-query).
+-- select 0-1 customers in the city, then count customers > 2
 CREATE PROC sp_liu_1
 AS
 BEGIN
-SELECT DISTINCT c.City
-FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID
-    JOIN [Order Details] od ON o.OrderID = od.OrderID
-WHERE c.City IN (SELECT DISTINCT City FROM Customers WHERE City IN (SELECT City FROM Customers GROUP BY City HAVING COUNT(CustomerID) >= 2))
-GROUP BY c.City, od.ProductID
-HAVING COUNT(od.ProductID) < 2
-ORDER BY c.City
+SELECT City FROM Customers
+WHERE CITY IN (SELECT c.City FROM Customers c JOIN Orders o ON o.CustomerID = c.CustomerID JOIN [Order Details] od ON o.OrderID = od.OrderID
+GROUP BY od.ProductID, c.CustomerID, c.City HAVING COUNT(*) BETWEEN 0 AND 1)
+GROUP BY City
+HAVING COUNT(*)>2
 END
 
 CREATE PROC sp_liu_2
 AS
 BEGIN
+SELECT City FROM Customers
+GROUP BY City
+HAVING COUNT(*)>2
+INTERSECT
+SELECT City FROM Customers C JOIN Orders O ON O.CustomerID=C.CustomerID JOIN [Order Details] OD ON O.OrderID = OD.OrderID
+GROUP BY OD.ProductID,C.CustomerID,City
+HAVING COUNT(*) BETWEEN 0 AND 1
+END
+
+CREATE PROC sp_liu_3
+AS
+BEGIN
 SELECT DISTINCT c.City
-FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID
-    JOIN [Order Details] od ON o.OrderID = od.OrderID
+FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID JOIN [Order Details] od ON o.OrderID = od.OrderID
 WHERE c.City IN (SELECT DISTINCT City FROM Customers WHERE City IN (SELECT City FROM Customers GROUP BY City HAVING COUNT(CustomerID) >= 2))
 GROUP BY c.City, od.ProductID
 HAVING COUNT(od.ProductID) < 2
