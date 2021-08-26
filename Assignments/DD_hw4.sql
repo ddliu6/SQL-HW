@@ -90,21 +90,21 @@ COMMIT
 -- 4.	Create a view named “view_product_order_[your_last_name]”, list all products and total ordered quantities for that product.
 CREATE VIEW view_product_order_liu
 AS
-SELECT ProductID, SUM(Quantity) Qty
-FROM [Order Details]
-GROUP BY ProductID
+SELECT ProductName,SUM(Quantity) As TotalOrderQty FROM [Order Details] OD JOIN Products P ON P.ProductID = OD.ProductID
+GROUP BY ProductName
 -- 5.	Create a stored procedure “sp_product_order_quantity_[your_last_name]” that accept product id as an input and total quantities of order as output parameter.
 CREATE PROC sp_product_order_quantity_liu @id INT, @qty INT OUT
 AS
 BEGIN
-SELECT @qty = Qty FROM view_product_order_liu WHERE ProductID = @id
+SELECT @qty = SUM(Quantity)  FROM [Order Details] OD JOIN Products P ON P.ProductID = OD.ProductID
+WHERE P.ProductID = @id
+GROUP BY ProductName
 END
 -- 6.	Create a stored procedure “sp_product_order_city_[your_last_name]” that accept product name as an input and top 5 cities that ordered most that product combined with the total quantity of that product ordered from that city as output.
-CREATE PROC sp_product_order_city_liu @pname nvarchar(40)
+CREATE PROC sp_product_order_city_liu @pname nvarchar(50)
 AS
 BEGIN
-SELECT TOP 5 o.ShipCity MostOrderedCity, SUM(od.Quantity) Qty FROM [Order Details] od JOIN Orders o ON od.OrderID = o.OrderID
-    JOIN Products p ON od.ProductID = p.ProductID
+SELECT TOP 5 o.ShipCity MostOrderedCity, SUM(od.Quantity) Qty FROM [Order Details] od JOIN Orders o ON od.OrderID = o.OrderID JOIN Products p ON od.ProductID = p.ProductID
 WHERE ProductName = @pname
 GROUP BY o.ShipCity
 ORDER BY Qty DESC
@@ -162,7 +162,7 @@ BEGIN
 SELECT * INTO birthday_employees_your_liu FROM Employees WHERE MONTH(BirthDate) = 2
 END
 -- 11.	Create a stored procedure named “sp_your_last_name_1” that returns all cites that have at least 2 customers who have bought no or only one kind of product. Create a stored procedure named “sp_your_last_name_2” that returns the same but using a different approach. (sub-query and no-sub-query).
--- select 0-1 customers in the city, then count customers > 2
+-- select 0-1 customers in the city, then count customers >= 2
 CREATE PROC sp_liu_1
 AS
 BEGIN
@@ -190,8 +190,8 @@ AS
 BEGIN
 SELECT DISTINCT c.City
 FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID JOIN [Order Details] od ON o.OrderID = od.OrderID
-WHERE c.City IN (SELECT DISTINCT City FROM Customers WHERE City IN (SELECT City FROM Customers GROUP BY City HAVING COUNT(CustomerID) >= 2))
-GROUP BY c.City, od.ProductID
+WHERE c.City IN (SELECT City FROM Customers GROUP BY City HAVING COUNT(CustomerID) > 2)
+GROUP BY c.City, od.ProductID, c.CustomerID
 HAVING COUNT(od.ProductID) < 2
 ORDER BY c.City
 END
