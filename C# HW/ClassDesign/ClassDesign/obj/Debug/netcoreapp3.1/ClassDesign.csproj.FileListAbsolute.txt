@@ -1,0 +1,14 @@
+D:\Desktop\ClassDesign\ClassDesign\bin\Debug\netcoreapp3.1\ClassDesign.exe
+D:\Desktop\ClassDesign\ClassDesign\bin\Debug\netcoreapp3.1\ClassDesign.deps.json
+D:\Desktop\ClassDesign\ClassDesign\bin\Debug\netcoreapp3.1\ClassDesign.runtimeconfig.json
+D:\Desktop\ClassDesign\ClassDesign\bin\Debug\netcoreapp3.1\ClassDesign.runtimeconfig.dev.json
+D:\Desktop\ClassDesign\ClassDesign\bin\Debug\netcoreapp3.1\ClassDesign.dll
+D:\Desktop\ClassDesign\ClassDesign\bin\Debug\netcoreapp3.1\ClassDesign.pdb
+D:\Desktop\ClassDesign\ClassDesign\obj\Debug\netcoreapp3.1\ClassDesign.csproj.AssemblyReference.cache
+D:\Desktop\ClassDesign\ClassDesign\obj\Debug\netcoreapp3.1\ClassDesign.GeneratedMSBuildEditorConfig.editorconfig
+D:\Desktop\ClassDesign\ClassDesign\obj\Debug\netcoreapp3.1\ClassDesign.AssemblyInfoInputs.cache
+D:\Desktop\ClassDesign\ClassDesign\obj\Debug\netcoreapp3.1\ClassDesign.AssemblyInfo.cs
+D:\Desktop\ClassDesign\ClassDesign\obj\Debug\netcoreapp3.1\ClassDesign.csproj.CoreCompileInputs.cache
+D:\Desktop\ClassDesign\ClassDesign\obj\Debug\netcoreapp3.1\ClassDesign.dll
+D:\Desktop\ClassDesign\ClassDesign\obj\Debug\netcoreapp3.1\ClassDesign.pdb
+D:\Desktop\ClassDesign\ClassDesign\obj\Debug\netcoreapp3.1\ClassDesign.genruntimeconfig.cache
