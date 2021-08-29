@@ -138,11 +138,11 @@ END
 -- 9.	Create 2 new tables “people_your_last_name” “city_your_last_name”. City table has two records: {Id:1, City: Seattle}, {Id:2, City: Green Bay}. People has three records: {id:1, Name: Aaron Rodgers, City: 2}, {id:2, Name: Russell Wilson, City:1}, {Id: 3, Name: Jody Nelson, City:2}. Remove city of Seattle. If there was anyone from Seattle, put them into a new city “Madison”. Create a view “Packers_your_name” lists all people from Green Bay. If any error occurred, no changes should be made to DB. (after test) Drop both tables and view.
 CREATE TABLE city_liu (
     Id INT PRIMARY KEY,
-    City varchar(30)
+    City VARCHAR(30)
 )
 CREATE TABLE people_liu (
     Id INT PRIMARY KEY,
-    Name varchar(30),
+    Name VARCHAR(30),
     City INT FOREIGN KEY REFERENCES city_liu(Id) ON DELETE SET NULL
 )
 
@@ -193,7 +193,6 @@ FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID JOIN [Order Detail
 WHERE c.City IN (SELECT City FROM Customers GROUP BY City HAVING COUNT(CustomerID) > 2)
 GROUP BY c.City, od.ProductID, c.CustomerID
 HAVING COUNT(od.ProductID) < 2
-ORDER BY c.City
 END
 -- 12.	How do you make sure two tables have the same data?
 Use EXCEPT between 2 tables, if it returns no row, then the data is the same 
