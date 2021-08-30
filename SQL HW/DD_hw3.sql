@@ -3,6 +3,7 @@
         Joins, since the cost is lower in most cases.
 -- 2.	What is CTE and when to use it?
         A Common Table Expression(CTE) is a temporary named result set that you can reference within a SELECT, INSERT, UPDATE, DELETE, or MERGE statement.
+        We can use CTE for recursive queries.
 -- 3.	What are Table Variables? What is their scope and where are they created in SQL Server?
         The table variable is a special data type that can be used to store temporary data similar to a temporary table.
         The table variable scope is within the batch. We can create a table variable inside a stored procedure and function as well.
@@ -119,25 +120,11 @@ WHERE empid NOT IN (SELECT mgrid FROM Employee WHERE mgrid IS NULL)
 -- 13.  Find departments that have maximum number of employees. 
 --      (solution should consider scenario having more than 1 departments that have maximum number of employees). 
 --      Result should only have - deptname, count of employees sorted by deptname.
-SELECT d.deptname
-FROM Dept d JOIN Employee e ON d.deptid = e.deptid
-HAVING COUNT(empid) = 
-(
-    SELECT MAX(total) FROM (
-    SELECT d.deptname, COUNT(e.empid) total
-    FROM Dept d JOIN Employee e ON d.deptid = e.deptid
-    GROUP BY d.deptname)
-)
-ORDER BY 1
+select deptid from employee 
+group by deptid 
+having count(*) = (select top 1 count(*) from employee group by deptid order by count(*) desc)
 -- 14.  Find top 3 employees (salary based) in every department.
 --      Result should have deptname, empid, salary sorted by deptname and then employee with high to low salary.
-SELECT TOP 3 d.deptname, e.empid, e.salary
-FROM Dept d JOIN Employee e ON d.deptid = e.deptid
-WHERE d.deptid IN 
-(
-    SELECT TOP 3 deptid, salary
-    FROM Employee
-    GROUP BY deptid 
-    ORDER BY 2 DESC
-)
-ORDER BY 1, 3 DESC
+select top 3 deptname,empid,salary 
+from employee e join dep d on e.deptid=d.deptid 
+order by salary,deptname,empid desc

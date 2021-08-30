@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Desktop\\ClassDesign\\ClassDesign\\ClassDesign.csproj": {}
+    "D:\\Desktop\\Training-HW\\C# HW\\ClassDesign\\ClassDesign\\ClassDesign.csproj": {}
   },
   "projects": {
-    "D:\\Desktop\\ClassDesign\\ClassDesign\\ClassDesign.csproj": {
+    "D:\\Desktop\\Training-HW\\C# HW\\ClassDesign\\ClassDesign\\ClassDesign.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Desktop\\ClassDesign\\ClassDesign\\ClassDesign.csproj",
+        "projectUniqueName": "D:\\Desktop\\Training-HW\\C# HW\\ClassDesign\\ClassDesign\\ClassDesign.csproj",
         "projectName": "ClassDesign",
-        "projectPath": "D:\\Desktop\\ClassDesign\\ClassDesign\\ClassDesign.csproj",
+        "projectPath": "D:\\Desktop\\Training-HW\\C# HW\\ClassDesign\\ClassDesign\\ClassDesign.csproj",
         "packagesPath": "C:\\Users\\DD\\.nuget\\packages\\",
-        "outputPath": "D:\\Desktop\\ClassDesign\\ClassDesign\\obj\\",
+        "outputPath": "D:\\Desktop\\Training-HW\\C# HW\\ClassDesign\\ClassDesign\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\DD\\AppData\\Roaming\\NuGet\\NuGet.Config",

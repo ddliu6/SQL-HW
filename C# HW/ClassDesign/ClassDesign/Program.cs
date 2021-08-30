@@ -6,7 +6,6 @@ namespace ClassDesign
     {
         static void Main(string[] args)
         {
-
             Dashboard dashboard = new Dashboard();
             dashboard.Run();
         }
