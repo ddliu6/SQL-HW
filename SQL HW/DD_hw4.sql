@@ -205,7 +205,7 @@ Use EXCEPT between 2 tables, if it returns no row, then the data is the same
 -- John Green
 -- Mike White M.
 -- Note: There is a dot after M when you output.
-SELECT fname + ' ' + lname + ' ' + mname + '.' [Full Name]
+SELECT fname + ' ' + lname + ' ' + Isnull(mname,'') + '.' [Full Name]
 FROM table
 -- 15.
 -- Student	Marks	Sex
@@ -215,6 +215,8 @@ FROM table
 --    Mi	 95	     M
 -- Find the top marks of Female students.
 -- If there are to students have the max score, only output one.
+select top 1 marks from student where sex = 'F' order by marks desc
+
 SELECT Student
 FROM table
 WHERE Marks = (
@@ -230,6 +232,8 @@ ORDER BY Student DESC
 --    Mi	 95	     M
 --    Bob	 80	     M
 -- How do you out put this?
+select * from students order by sex,marks
+
     SELECT Student, Marks, Sex
     FROM table
     WHERE Sex = 'F'
